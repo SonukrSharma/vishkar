@@ -1,9 +1,24 @@
 """
-Chapter prompt templates for DevBlueprint AI.
+Chapter prompt templates for Vishkar.
 Each function returns the prompt string for that chapter given the user's answers.
 """
 
 from app.models.blueprint import ProjectAnswers
+
+
+def _formatting_rules() -> str:
+    return """
+FORMATTING RULES (follow strictly — the output is parsed into a Word document):
+- Use ## for section headings, ### for subsections, #### for sub-subsections
+- Use markdown tables (| Header | Header |) for any data with multiple columns — always include a header row and a separator row (|---|---|)
+- Use ``` code blocks for ALL code, commands, config files, schemas, file paths, and environment variables
+- Use - for bullet points, 1. 2. 3. for sequential steps
+- Use - [ ] for checklist items (setup steps, QA checklists)
+- Use **bold** for important terms, field names, and key concepts
+- Use `backticks` for inline code, file names, method names, and technical values
+- In Chapter 6 only: wrap each complete ready-to-paste prompt inside > blockquote lines
+- No generic filler — every sentence must be specific to this exact project
+""".strip()
 
 
 def _context_block(answers: ProjectAnswers) -> str:
@@ -24,7 +39,7 @@ PROJECT CONTEXT:
 
 def chapter_1_prompt(answers: ProjectAnswers) -> str:
     return f"""
-You are DevBlueprint AI, an expert software architect and technical writer.
+You are Vishkar, an expert software architect and technical writer.
 Generate Chapter 1 — Vision & Scope for the following project.
 
 {_context_block(answers)}
@@ -36,14 +51,13 @@ Write a detailed, developer-ready Chapter 1 covering:
 4. Page-Level Breakdown — all pages/screens, purpose of each, who can access, MVP priority
 5. Competitor Inspiration — 3 reference applications, what to copy, what to do differently, differentiator statement
 
-Be specific, actionable, and tailored to the exact project described. No generic filler.
-Use tables where appropriate. Format sections with clear headings.
+{_formatting_rules()}
 """.strip()
 
 
 def chapter_2_prompt(answers: ProjectAnswers) -> str:
     return f"""
-You are DevBlueprint AI, an expert software architect and technical writer.
+You are Vishkar, an expert software architect and technical writer.
 Generate Chapter 2 — Functional Planning for the following project.
 
 {_context_block(answers)}
@@ -55,13 +69,13 @@ Write a detailed, developer-ready Chapter 2 covering:
 4. Data Flow — what data enters the system, what gets transformed, stored, and returned
 5. Business Rules — access control logic, notification triggers, state machines for key entities
 
-Be specific and tailored to this exact project. Include tables and state diagrams as text.
+{_formatting_rules()}
 """.strip()
 
 
 def chapter_3_prompt(answers: ProjectAnswers) -> str:
     return f"""
-You are DevBlueprint AI, an expert software architect and technical writer.
+You are Vishkar, an expert software architect and technical writer.
 Generate Chapter 3 — Environment Setup for the following project.
 
 {_context_block(answers)}
@@ -75,12 +89,14 @@ Write a complete, step-by-step Chapter 3 covering:
 
 Every step must be explicit enough that a junior developer can follow without googling anything.
 Stack being used: {answers.tech_stack_backend} backend, {answers.tech_stack_frontend} frontend, {answers.tech_stack_database} database.
+
+{_formatting_rules()}
 """.strip()
 
 
 def chapter_4_prompt(answers: ProjectAnswers) -> str:
     return f"""
-You are DevBlueprint AI, an expert software architect and technical writer.
+You are Vishkar, an expert software architect and technical writer.
 Generate Chapter 4 — Backend Blueprint for the following project.
 
 {_context_block(answers)}
@@ -94,12 +110,14 @@ Write a complete, coding-agent-ready Chapter 4 covering:
 6. Cross-Cutting Concerns — global exception handler, logging strategy, audit trail, standard response envelope
 
 Be extremely specific. The output of this chapter should be paste-able into a coding agent prompt.
+
+{_formatting_rules()}
 """.strip()
 
 
 def chapter_5_prompt(answers: ProjectAnswers) -> str:
     return f"""
-You are DevBlueprint AI, an expert software architect and technical writer.
+You are Vishkar, an expert software architect and technical writer.
 Generate Chapter 5 — Frontend Blueprint for the following project.
 
 {_context_block(answers)}
@@ -113,12 +131,14 @@ Write a complete, coding-agent-ready Chapter 5 covering:
 6. UX Specifics — responsive breakpoints, animations, form validation UX, toast/notification system
 
 Frontend stack: {answers.tech_stack_frontend}. Be specific enough that a coding agent can generate the full frontend in one pass.
+
+{_formatting_rules()}
 """.strip()
 
 
 def chapter_6_prompt(answers: ProjectAnswers) -> str:
     return f"""
-You are DevBlueprint AI, an expert software architect and technical writer.
+You are Vishkar, an expert software architect and technical writer.
 Generate Chapter 6 — Prompt Engineering Layer for the following project.
 
 {_context_block(answers)}
@@ -131,13 +151,15 @@ Write Chapter 6 with ready-to-use prompts for coding agents. Include:
 5. Iteration & Fix Prompt — how to re-prompt when output fails, what context to re-include, bug report template
 6. Prompt Hygiene Rules — max context per prompt, chunking strategy, output format instructions, verification steps
 
-Each prompt should be wrapped in a clear callout block and ready to copy-paste into Claude, Cursor, or Copilot.
+Each prompt should be wrapped in > blockquote lines and ready to copy-paste into Claude, Cursor, or Copilot.
+
+{_formatting_rules()}
 """.strip()
 
 
 def chapter_7_prompt(answers: ProjectAnswers) -> str:
     return f"""
-You are DevBlueprint AI, an expert software architect and technical writer.
+You are Vishkar, an expert software architect and technical writer.
 Generate Chapter 7 — Testing & QA for the following project.
 
 {_context_block(answers)}
@@ -150,12 +172,14 @@ Write a complete testing plan covering:
 5. Edge Case Test Plan — boundary value tests, concurrent request tests, large data/pagination, auth expiry scenarios
 
 Make the manual QA checklist a proper checkbox-style checklist. Be specific to this project's features.
+
+{_formatting_rules()}
 """.strip()
 
 
 def chapter_8_prompt(answers: ProjectAnswers) -> str:
     return f"""
-You are DevBlueprint AI, an expert software architect and technical writer.
+You are Vishkar, an expert software architect and technical writer.
 Generate Chapter 8 — Deploy & Launch for the following project.
 
 {_context_block(answers)}
@@ -168,12 +192,14 @@ Write a complete deployment guide covering:
 5. Rollback Strategy — how to revert a failed deploy, database migration rollback, feature flag approach, zero-downtime deployment
 
 Target deployment: {answers.deployment_target}. Be specific and include actual config file examples (GitHub Actions YAML, etc.).
+
+{_formatting_rules()}
 """.strip()
 
 
 def chapter_9_prompt(answers: ProjectAnswers) -> str:
     return f"""
-You are DevBlueprint AI, an expert software architect and technical writer.
+You are Vishkar, an expert software architect and technical writer.
 Generate Chapter 9 — Business & Data Layer for the following project.
 
 {_context_block(answers)}
@@ -185,12 +211,14 @@ Write a business-readiness chapter covering:
 4. Raw Material Sourcing — domain-specific sourcing guidance (suppliers, content providers, data feeds, compliance requirements)
 
 Make this specific to the domain: {answers.app_description}. Include realistic pricing comparisons and actual named services/APIs.
+
+{_formatting_rules()}
 """.strip()
 
 
 def chapter_10_prompt(answers: ProjectAnswers) -> str:
     return f"""
-You are DevBlueprint AI, an expert software architect and technical writer.
+You are Vishkar, an expert software architect and technical writer.
 Generate Chapter 10 — Post-Launch & Maintenance for the following project.
 
 {_context_block(answers)}
@@ -203,6 +231,8 @@ Write a complete post-launch plan covering:
 5. Security Maintenance — dependency audit schedule, vulnerability scanning tools, secret rotation schedule, penetration test plan
 
 Target deployment environment: {answers.deployment_target}. Be specific about tooling that works with this stack.
+
+{_formatting_rules()}
 """.strip()
 
 
